@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1014843455838",
+    "firebase_url": "https://jokesapp-d8ce1.firebaseio.com",
+    "project_id": "jokesapp-d8ce1",
+    "storage_bucket": "jokesapp-d8ce1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1014843455838:android:08e31ecf33594f3733b7cf",
+        "android_client_info": {
+          "package_name": "com.jokesbychathura"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1014843455838-rlfv9rh2ospnpgr5olg0d30qt69gn0gc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOzbOFJjDlvl9E5BRhfjkPlF6KQ5fSHHs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1014843455838-rlfv9rh2ospnpgr5olg0d30qt69gn0gc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
