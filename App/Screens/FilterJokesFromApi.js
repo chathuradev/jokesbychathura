@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, StyleSheet, Image, ImageBackground} from 'react-native'
+import {View, StyleSheet, Image, ImageBackground, Alert} from 'react-native'
 import {
   Container,
   Header,
@@ -10,7 +10,9 @@ import {
   Button,
   Text,
   Picker,
-  Form
+  Form,
+  Footer,
+  FooterTab
 } from 'native-base';
 import {
   responsiveHeight as hp,
@@ -20,6 +22,9 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons'
 import appStyles from '../styles/styles'
 import axios from 'axios'
+import {fcmService} from '../FCMService'
+import {localNotificationService} from '../LocalNotificationService'
+import { FCMKey, FCMToken } from '../config/index'
 
 class FilterJokesFromApi extends React.Component {
   constructor(props) {
@@ -32,8 +37,90 @@ class FilterJokesFromApi extends React.Component {
           "programming",
           "knock-knock"
         ],
-        isLoading: true
+        isLoading: true,
+        punchline: ''
     };
+  }
+
+  componentDidMount() {
+    this._fetchData(this.state.filters[0])
+    this._initializePushNotofications()
+  }
+
+  _initializePushNotofications() {
+    fcmService.registerAppWithFCM()
+    fcmService.register(onRegister, onNotification, onOpenNotification)
+    localNotificationService.configure(onOpenNotification)
+
+    function onRegister(token) {
+      console.log("[App] onRegister: ", token)
+    }
+
+    function onNotification(notify) {
+      console.log("[App] onNotification: ", notify)
+      const options = {
+        soundName: 'default',
+        playSound: true //,
+        // largeIcon: 'ic_launcher', // add icon large for Android (Link: app/src/main/mipmap)
+        // smallIcon: 'ic_launcher' // add icon small for Android (Link: app/src/main/mipmap)
+      }
+      localNotificationService.showNotification(
+        0,
+        notify.title,
+        notify.body,
+        notify,
+        options
+      )
+    }
+
+    function onOpenNotification(notify) {
+      console.log("[App] onOpenNotification: ", notify)
+      Alert.alert(
+        notify.title,
+        notify.body
+      )
+    }
+  }
+
+  componentWillUnmount() {
+    return () => {
+      console.log("[App] unRegister")
+      fcmService.unRegister()
+      localNotificationService.unregister()
+    }
+  }
+
+  async _handlePushNotofications() {
+    let joke = ''
+
+    // fetch a joke from the backend
+    await axios.request({
+      baseURL: "https://official-joke-api.appspot.com/random_joke",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'get'
+    }).then(async (response) => {
+      joke = response.data.setup
+      this.setState({ punchline: response.data.punchline })
+    }).catch(err => console.log(err))
+
+    let json = {
+      to: FCMToken,
+      notification: {
+        title: '🤔 '+joke,
+        body: '😂 ' + this.state.punchline,
+        mutable_content: true
+      }
+    }
+    await axios.post('https://fcm.googleapis.com/fcm/send', json, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+FCMKey
+      }
+    }).then(async (response) => {
+      console.log(response.data)
+    }).catch(err => console.log(err))
   }
 
   onValueChange(value) {
@@ -53,10 +140,6 @@ class FilterJokesFromApi extends React.Component {
     }).then(async (response) => {
       this.setState({ jokes: response.data })
     }).catch(err => console.log(err))
-  }
-
-  componentDidMount() {
-    this._fetchData(this.state.filters[0])
   }
 
   _renderFilterRandomJokeSection() {
@@ -161,6 +244,30 @@ class FilterJokesFromApi extends React.Component {
               </Text>
             </View>
           </Content>
+          <Footer
+            style={[
+              {
+                borderColor: 'transparent',
+                height: hp(10),
+                backgroundColor: '#222324',
+              },
+            ]}>
+            <FooterTab
+              style={[
+                {
+                  marginHorizontal: wp(2),
+                  marginVertical: hp(2),
+                  backgroundColor: '#222324',
+                },
+              ]}>
+              <Button
+                full
+                style={appStyles.redFullButton}
+                onPress={() => this._handlePushNotofications()}>
+                <Text style={appStyles.textWhiteButton}>PUSH NOTIFICATION</Text>
+              </Button>
+            </FooterTab>
+          </Footer>
         </ImageBackground>
       </Container>
     );

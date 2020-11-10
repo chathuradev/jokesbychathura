@@ -2,7 +2,6 @@ import { createStackNavigator } from 'react-navigation-stack'
 import { createAppContainer } from 'react-navigation'
 import React, { Component } from 'react'
 import { Root } from "native-base"
-import 'react-native-gesture-handler'
 import NavigationService from './NavigationService'
 
 export const AppNavigator = createStackNavigator(

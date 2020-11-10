@@ -20,19 +20,23 @@ class Register extends React.Component {
 
   _signUpHandler() {
     const { email, password } = this.state
-    auth().createUserWithEmailAndPassword(email, password).then(() => {
-      console.log('User account created & signed in!')
-      this.props.navigation.navigate('Home')
-    }).catch((error) => {
-      if (error.code === 'auth/email-already-in-use') {
-        console.log('That email address is already in use!')
-      }
-  
-      if (error.code === 'auth/invalid-email') {
-        console.log('That email address is invalid!')
-      }
-      console.error(error)
-    })
+    if (email != '' && password != '') {
+      auth().createUserWithEmailAndPassword(email, password).then(() => {
+        console.log('User account created & signed in!')
+        this.props.navigation.navigate('Home')
+      }).catch((error) => {
+        if (error.code === 'auth/email-already-in-use') {
+          console.log('That email address is already in use!')
+        }
+    
+        if (error.code === 'auth/invalid-email') {
+          console.log('That email address is invalid!')
+        }
+        console.error(error)
+      })
+    } else {
+      alert('Password and Email can not be empty!')
+    }
   }
 
   render() {

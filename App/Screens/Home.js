@@ -14,6 +14,7 @@ import {
   Body,
   Button,
   Text,
+  Toast,
   Footer,
   FooterTab
 } from 'native-base'
@@ -37,7 +38,20 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
+    this._welcomeAlert()
     this._fetchRandomJoke()
+  }
+
+  _welcomeAlert() {
+    const user = auth().currentUser
+    const text = "You're logged in as "+user.email
+    Toast.show({
+      text: text,
+      duration: 5000,
+      buttonStyle: {height: hp(7)},
+      buttonText: "Got it!",
+      type: "success"
+    })
   }
 
   async _fetchRandomJoke() {

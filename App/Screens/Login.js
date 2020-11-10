@@ -21,12 +21,16 @@ class Login extends React.Component {
 
   _loginHandler() {
     const { email, password } = this.state
-    auth().signInWithEmailAndPassword(email, password).then((user) => {
-      console.log('User logged in!')
-      NavigationService.navigate('Home', user)
-    }).catch((error) => {
-      console.log('User logging error', error)
-    })
+    if (email != '' && password != '') {
+      auth().signInWithEmailAndPassword(email, password).then((user) => {
+        console.log('User logged in!')
+        NavigationService.navigate('Home', user)
+      }).catch((error) => {
+        console.log('User logging error', error)
+      })
+    } else {
+      alert('Password and Email can not be empty!')
+    }
   }
 
   render() {

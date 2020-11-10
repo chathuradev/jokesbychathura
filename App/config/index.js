@@ -1,0 +1,6 @@
+let FCMKey = "AAAA7EliOV4:APA91bHiPUy5xlOJnbqdit52MjvUyRLOZXswtPMVoL5VXTlp3uFuuFLGBqidfh22KWNIgPhD1lpp6uXeWBIblrI15x_N9qmMxRERlF4E3R_z4Wm1TU3p5dbb30027ppncAQjSHFC3GMM"
+let FCMToken = "fuo-7T-fRs2jUJd9g4C7KB:APA91bHMm-VD2fjIdxq4_DVs9dVZHcpG0DR-cm-hKXdoiaWMwifo2IOAc-QM7sg3n9GZ4kjZCYwAERuHvZGi9CY71_Ylko1OUBo6vaSCLpYL--xzAwJwBprsVAWWVFrj-eaU09ZQ3ai8"
+
+
+exports.FCMKey = FCMKey
+exports.FCMToken = FCMToken
